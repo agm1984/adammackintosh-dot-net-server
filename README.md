@@ -36,6 +36,8 @@ $ npm run start:local
 ## Environment Config
 The API contains an example environment config which facilitates Neo4j and Mongo DB configurations.
 
+Simply rename the file from `./env/config.example.js` to `./env/config.js` and change the database credentials.
+
 ### Polyglot Databases
 > adammackintosh.net uses Polyglot Persistence because relying on one database to handle all storage and retrieval duties is not maximally efficient or scalable. Rather, multiple databases are used, each for the duties at which it excels.
 
