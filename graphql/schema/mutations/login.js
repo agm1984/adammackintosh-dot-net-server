@@ -15,7 +15,7 @@ const login = async (root, args, context) => {
   const { loginValidator } = db.get('fieldValidators')
   const session = Neo4J.session()
   try {
-    // VALIDATE FIELDS
+    // VALIDATE
     const { error, value } = Joi.validate({
       person_email: args.person_email.toLowerCase(),
       person_password: args.person_password,
@@ -23,14 +23,17 @@ const login = async (root, args, context) => {
     if (error) {
       throw new Error('Field validation error.')
     }
+
+    // CHECK PASSWORD
     const {
       person_encryptedPassword, person_serialNumber,
     } = await getPersonByEmail(context, value.person_email)
-    // CHECK PASSWORD
     const validPassword = await bcrypt.compare(value.person_password, person_encryptedPassword)
     if (!validPassword) {
       throw new Error('Authentication failed.')
     }
+
+    // GIVE JWT TOKEN
     const token = jwt.sign(
       {
         person: person_serialNumber,

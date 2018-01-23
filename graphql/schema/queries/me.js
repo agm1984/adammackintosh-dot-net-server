@@ -1,4 +1,4 @@
-import { isAuthenticated } from '../../auth/isAuthenticated'
+import isAuthenticated from '../auth/isAuthenticated'
 
 /**
  * The me Resolver gets the details of the currently signed in Person.
@@ -13,9 +13,11 @@ const me = async (root, args, context) => {
   try {
     isAuthenticated(context)
     const { person } = context
+
+    // GET SELF FROM NEO4J
     const result = await session.run(`
       MATCH (p:Person)
-      WHERE p.person_serialNumber = '${person}'
+      WHERE p.person_serialNumber = $person
       RETURN p AS person
     `, { person })
     session.close()

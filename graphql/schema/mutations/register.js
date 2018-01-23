@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import { checkEmailInUse } from './helpers'
 
 /**
- * The register Resolver creates and adds a new Person to the system.
+ * The register Resolver allows a new Person to add his/her self to the system.
  * @param {Object} root GraphQL Root Value
  * @param {Object} args GraphQL Request Arguments
  * @param {Object} context GraphQL Context Value
@@ -18,7 +18,7 @@ const register = async (root, args, context) => {
   const session = Neo4J.session()
   const tx = session.beginTransaction()
   try {
-    // VALIDATE FIELDS
+    // VALIDATE
     const { error, value } = Joi.validate({
       ...args,
       person_email: args.person_email.toLowerCase(),
@@ -31,6 +31,8 @@ const register = async (root, args, context) => {
     if (personExists) {
       throw new Error('An account with this email already exists.')
     }
+
+    // PREPARE NEW PERSON
     const saltRounds = 10
     const encryptedPassword = await bcrypt.hash(person_password, saltRounds)
     const serialNumber = uuid().split('-').join('')
@@ -72,6 +74,8 @@ const register = async (root, args, context) => {
 
     await tx.commit()
     session.close()
+
+    // GIVE JWT TOKEN
     const token = jwt.sign(
       {
         person: completedFields.person_serialNumber,

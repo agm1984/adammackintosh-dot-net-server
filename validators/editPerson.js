@@ -1,7 +1,7 @@
 import Joi from 'joi'
 
 const editPersonValidator = {
-  person_serialNumber: Joi.string().required().min(10),
+  person_serialNumber: Joi.string().required().min(20).max(64),
   person_status: Joi.string(),
   person_memberType: Joi.string(),
   person_canBeEmailed: Joi.boolean(),

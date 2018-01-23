@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import generateSlug from 'slug'
+import isAuthenticated from '../auth/isAuthenticated'
 import { checkAuthorExists, checkSlugInUse } from './helpers'
 
 /**
@@ -17,7 +18,8 @@ const addArticle = async (root, args, context) => {
   const tx = session.beginTransaction()
   let mongoSuccess
   try {
-    // VALIDATE FIELDS
+    // VALIDATE
+    isAuthenticated(context)
     const { error, value } = Joi.validate({
       article_status: args.article_status,
       article_title: args.article_title,
@@ -38,6 +40,8 @@ const addArticle = async (root, args, context) => {
     if (!validAuthor) {
       throw new Error('Author is invalid.')
     }
+
+    // PREPARE NEW ARTICLE
     const {
       article_status,
       article_title,
@@ -81,11 +85,13 @@ const addArticle = async (root, args, context) => {
       MATCH (p:Person), (a:Article)
       WHERE p.person_serialNumber = $initialFields.article_authorSerialNumber
       AND a.article_slug = $initialFields.article_slug
-      CREATE (p)-[r:CONTRIBUTED { created: $initialFields.article_created }]->(a)
+      CREATE (p)-[r:CONTRIBUTED {
+        created: $initialFields.article_created
+      }]->(a)
       RETURN p AS Person, r AS Contributed, a AS Article
     `, { initialFields })
     if (linkAuthorInNeo4j.records.length !== 1) {
-      throw new Error(`Problem linking Author (${initialFields.article_authorSerialNumber}) to new Article in Neo4j.`)
+      throw new Error('Problem linking Author to new Article in Neo4j.')
     }
 
     // LINK TAGS IN NEO4J
@@ -104,7 +110,6 @@ const addArticle = async (root, args, context) => {
     await tx.commit()
     return finalFields
   } catch (e) {
-    console.log('ERROR', e)
     await Article.findByIdAndRemove({ _id: mongoSuccess._id })
     tx.rollback()
     session.close()

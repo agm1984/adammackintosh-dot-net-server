@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import isAuthenticated from '../auth/isAuthenticated'
 
 /**
  * The getArticle Resolver gets the details of the specified Article,
@@ -10,19 +11,19 @@ import Joi from 'joi'
 const getArticle = async (root, args, context) => {
   const { db } = context
   const Neo4J = db.get('Neo4J')
+  const { getArticleValidator } = db.get('fieldValidators')
   const session = Neo4J.session()
   try {
-    // VALIDATE FIELDS
-    const schema = {
-      article_slug: Joi.string().required().min(4).max(64),
-    }
+    // VALIDATE
+    isAuthenticated(context)
     const { error, value } = Joi.validate({
       article_slug: args.article_slug,
-    }, schema)
+    }, getArticleValidator)
     if (error) {
       throw new Error('Field validation error.')
     }
     const slug = value.article_slug
+
     // GET ARTICLE FROM NEO4J
     const article = await session.run(`
     MATCH (a:Article)

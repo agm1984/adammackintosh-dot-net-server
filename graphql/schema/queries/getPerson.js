@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import isAuthenticated from '../auth/isAuthenticated'
 
 /**
  * The getPerson Resolver gets the details of the specified Person,
@@ -10,19 +11,19 @@ import Joi from 'joi'
 const getPerson = async (root, args, context) => {
   const { db } = context
   const Neo4J = db.get('Neo4J')
+  const { getPersonValidator } = db.get('fieldValidators')
   const session = Neo4J.session()
   try {
-    // VALIDATE FIELDS
-    const schema = {
-      person_serialNumber: Joi.string().required().min(20).max(64),
-    }
+    // VALIDATE
+    isAuthenticated(context)
     const { error, value } = Joi.validate({
       person_serialNumber: args.person_serialNumber,
-    }, schema)
+    }, getPersonValidator)
     if (error) {
       throw new Error('Field validation error.')
     }
     const serialNumber = value.person_serialNumber
+
     // GET PERSON FROM NEO4J
     const person = await session.run(`
       MATCH (p:Person)

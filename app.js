@@ -11,10 +11,10 @@ import MongooseModels from './models'
 import fieldValidators from './validators'
 import getConfig from './env/config'
 
+const config = getConfig(process.env.NODE_ENV)
 const app = express()
 
 // ENVIRONMENT CONFIG
-const config = getConfig(process.env.NODE_ENV)
 if (process.env.NODE_ENV !== 'production') {
   process.on('unhandledRejection', (reason, promise) => {
     console.log(
@@ -34,6 +34,8 @@ const db = new Map([
 ])
 
 // MIDDLEWARE
+app.set('view engine', 'ejs')
+app.use(express.static('public'))
 app.use(cors(config.CORS_OPTIONS))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -79,9 +81,9 @@ app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
 }))
 
-// EVENT LOGGER
+// EVENT LOGGING
 app.all('*', async (req, res, next) => {
-  // ADD REQUEST COUNTERS HERE: req.counter += 1
+  // FUTURE: Add request counters eg: req.counter += 1
   console.log(`
     -- Person hitting route --
     HTTP METHOD: ${req.method},

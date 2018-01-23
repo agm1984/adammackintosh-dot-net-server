@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import bcrypt from 'bcrypt'
 import { v4 as uuid } from 'uuid'
+import isAuthenticated from '../auth/isAuthenticated'
 import { emailInUse } from './helpers'
 
 /**
@@ -17,7 +18,8 @@ const addPerson = async (root, args, context) => {
   const session = Neo4J.session()
   const tx = session.beginTransaction()
   try {
-    // VALIDATE FIELDS
+    // VALIDATE
+    isAuthenticated(context)
     const { error, value } = Joi.validate({
       ...args,
       person_email: args.person_email.toLowerCase(),
@@ -30,6 +32,8 @@ const addPerson = async (root, args, context) => {
     if (personExists) {
       throw new Error('An account with this email already exists.')
     }
+
+    // PREPARE NEW PERSON
     const saltRounds = 10
     const encryptedPassword = await bcrypt.hash(person_password, saltRounds)
     const serialNumber = uuid().split('-').join('')

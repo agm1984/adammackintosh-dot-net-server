@@ -1,3 +1,5 @@
+import isAuthenticated from '../auth/isAuthenticated'
+
 /**
  * Deleting is not currently supporting, but it should look roughly like this,
  * but with field validation as well.
@@ -11,7 +13,10 @@ const deleteArticle = async (root, args, context) => {
   const session = Neo4J.session()
   const tx = session.beginTransaction()
   try {
+    isAuthenticated(context)
     const { article_slug } = args
+
+    // DELETE ARTICLE IN NEO4J
     const neo4jDelete = await tx.run(`
       MATCH (a:Article)
       WHERE a.article_slug = $article_slug

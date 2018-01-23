@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import bcrypt from 'bcrypt'
+import isAuthenticated from '../auth/isAuthenticated'
 import { checkEmailInUse } from './helpers'
 
 /**
@@ -16,7 +17,8 @@ const editPerson = async (root, args, context) => {
   const session = Neo4J.session()
   const tx = session.beginTransaction()
   try {
-    // VALIDATE FIELDS
+    // VALIDATE
+    isAuthenticated(context)
     const { error, value } = Joi.validate({
       ...args,
       person_email: args.person_email && args.person_email.toLowerCase(),
@@ -32,7 +34,7 @@ const editPerson = async (root, args, context) => {
       }
     }
 
-    // SET NEW PASSWORD
+    // PREPARE EDITED PERSON
     const saltRounds = 10
     let encryptedPassword
     if (person_password) {

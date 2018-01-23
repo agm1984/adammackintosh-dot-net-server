@@ -1,3 +1,5 @@
+import isAuthenticated from '../../auth/isAuthenticated'
+
 /**
  * The getTags Sub-field Resolver gets the Tags linked to the specified Article.
  * @param {Object} root GraphQL Root Value
@@ -9,6 +11,9 @@ const getTags = async (root, args, context) => {
   const Neo4J = db.get('Neo4J')
   const session = Neo4J.session()
   try {
+    isAuthenticated(context)
+
+    // GET ARTICLE AUTHOR FROM NEO4J
     const result = await session.run(`
       MATCH (a:Article)-[r:RELATES_TO]->(t:Tag)
       WHERE a.article_slug = $root.article_slug

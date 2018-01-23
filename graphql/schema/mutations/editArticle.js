@@ -18,7 +18,7 @@ const editArticle = async (root, args, context) => {
   const session = Neo4J.session()
   const tx = session.beginTransaction()
   try {
-    // VALIDATE FIELDS
+    // VALIDATE
     const { error, value } = Joi.validate({
       ...args,
     }, editArticleValidator)
@@ -34,6 +34,8 @@ const editArticle = async (root, args, context) => {
         throw new Error('An article with this title already exists.')
       }
     }
+
+    // PREPARE EDITED ARTICLE
     const timestamp = Date.now()
     const articleProps = {
       ...value,

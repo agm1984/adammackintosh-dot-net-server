@@ -1,3 +1,5 @@
+import isAuthenticated from '../../auth/isAuthenticated'
+
 /**
  * The getAuthor Sub-field Resolver gets the Author linked to the specified Article.
  * @param {Object} root GraphQL Root Value
@@ -9,6 +11,9 @@ const getAuthor = async (root, args, context) => {
   const Neo4J = db.get('Neo4J')
   const session = Neo4J.session()
   try {
+    isAuthenticated(context)
+
+    // GET ARTICLE AUTHOR FROM NEO4J
     const result = await session.run(`
       MATCH (p:Person)-[r:CONTRIBUTED]->(a:Article)
       WHERE a.article_slug = $root.article_slug

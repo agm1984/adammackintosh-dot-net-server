@@ -3,7 +3,7 @@
 
 > Adam Mackintosh's Portfolio API. Feel free to inspect.
 
-This portfolio has been designed from the ground up to facilitate demonstration of skills and abilities, but it is also creatively expressed in doing so. There are two main types of viewer types of this portfolio. One, any person that may find themselves browsing it, and two, potential employers and clients. For these reasons, portfolio content delivery is aimed to be not only engaging and light in nature but also very objective and fact-based.
+This portfolio has been designed from the ground up to facilitate demonstration of skills and abilities, but it is also creatively expressed in doing so. There are two main viewer types of this portfolio. One, any person that may find themselves browsing it, and two, potential employers and clients. For these reasons, portfolio content delivery is aimed to be not only engaging and light in nature but also very objective and fact-based.
 
 
 ## Demonstrated Technologies
