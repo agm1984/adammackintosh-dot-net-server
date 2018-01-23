@@ -34,7 +34,7 @@ $ npm run start:local
 ```
 
 ## Environment Config
-The API contains an example environment config which facilitates Neo4j and Mongo DB configurations.
+The API contains an example environment config which facilitates Neo4j and Mongo DB configurations and CORS.
 
 Simply rename the file from `./env/config.example.js` to `./env/config.js` and change the database credentials.
 
