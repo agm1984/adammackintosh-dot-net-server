@@ -1,12 +1,12 @@
 import {
   me, getAllPeople, getPerson, getAllArticles, getArticle,
-} from './queries'
+} from '../queries'
 import {
   getAuthor, getTags,
-} from './queries/Article'
+} from '../queries/Article'
 import {
   register, login, addPerson, editPerson, addArticle, editArticle, deleteArticle,
-} from './mutations'
+} from '../mutations'
 
 const resolvers = {
   Query: {
