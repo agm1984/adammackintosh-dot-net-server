@@ -1,0 +1,42 @@
+{
+    "env": {
+        "node": true,
+        "es6": true
+    },
+    "parser": "babel-eslint",
+    "extends": "airbnb-base",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        },
+        "sourceType": "module"
+    },
+    "plugins": [
+        "import"
+    ],
+    "rules": {
+        "camelcase": 0,
+        "no-underscore-dangle": 0,
+        "import/no-dynamic-require": 0,
+        "eol-last": [
+            "error",
+            "always"
+        ],
+        "indent": [
+            "error",
+            2,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "linebreak-style": 0,
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ]
+    }
+}
