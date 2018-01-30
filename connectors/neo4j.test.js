@@ -2,11 +2,11 @@ import Neo4J from './neo4j'
 
 const driver = Neo4J.getDriver()
 
-test('Neo4j Driver connects', () => {
+test('Neo4j driver connects', () => {
   expect(driver).toBeDefined()
 })
 
-test('Neo4j Test Query works', async () => {
+test('Neo4j test query works', async () => {
   const session = driver.session()
   const testQuery = await session
     .run(`

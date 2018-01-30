@@ -1,11 +1,11 @@
 import {
-  me, getAllPeople, getPerson, getAllArticles, getArticle,
+  me, getAllPeople, getPerson,
+  getAllArticles, getArticle,
 } from '../queries'
+import { getAuthor, getTags } from '../queries/Article'
 import {
-  getAuthor, getTags,
-} from '../queries/Article'
-import {
-  register, login, addPerson, editPerson, addArticle, editArticle, deleteArticle,
+  register, login, addPerson, editPerson,
+  addArticle, editArticle, deleteArticle,
 } from '../mutations'
 
 const resolvers = {

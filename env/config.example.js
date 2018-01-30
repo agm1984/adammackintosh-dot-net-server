@@ -48,6 +48,9 @@ const getConfig = (NODE_ENV) => {
       },
     },
   }
+  if (!NODE_ENV) {
+    return env.localhost
+  }
   return env[NODE_ENV]
 }
 

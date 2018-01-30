@@ -2,7 +2,7 @@ import Joi from 'joi'
 import bcrypt from 'bcrypt'
 import { v4 as uuid } from 'uuid'
 import isAuthenticated from '../auth/isAuthenticated'
-import { emailInUse } from './helpers'
+import { checkEmailInUse } from './helpers'
 
 /**
  * The addPerson Resolver creates and adds a new Person to the system.
@@ -28,7 +28,7 @@ const addPerson = async (root, args, context) => {
       throw new Error('Field validation error.')
     }
     const { person_email, person_password } = value
-    const personExists = await emailInUse(context, person_email)
+    const personExists = await checkEmailInUse(context, person_email)
     if (personExists) {
       throw new Error('An account with this email already exists.')
     }
