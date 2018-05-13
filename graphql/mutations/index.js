@@ -1,3 +1,4 @@
+import contact from './contact'
 import register from './register'
 import login from './login'
 import addPerson from './addPerson'
@@ -7,6 +8,7 @@ import editArticle from './editArticle'
 import deleteArticle from './deleteArticle'
 
 export {
+  contact,
   register,
   login,
   addPerson,

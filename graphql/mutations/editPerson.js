@@ -18,7 +18,10 @@ const editPerson = async (root, args, context) => {
   const tx = session.beginTransaction()
   try {
     // VALIDATE
-    isAuthenticated(context)
+    const hasAuth = isAuthenticated(context)
+    if (!hasAuth) {
+      throw new Error('You must be authenticated to run this query.')
+    }
     const { error, value } = Joi.validate({
       ...args,
       person_email: args.person_email && args.person_email.toLowerCase(),
@@ -71,7 +74,7 @@ const editPerson = async (root, args, context) => {
       },
     )
     if (!updateInMongo) {
-      throw new Error('Something went wrong adding Person to Mongo DB.')
+      throw new Error('Something went wrong updating Person in Mongo DB.')
     }
 
     await tx.commit()

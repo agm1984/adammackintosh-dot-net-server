@@ -1,5 +1,22 @@
 # Available Mutations
 
+## Message
+```
+mutation Contact {
+  contact(
+    message_subject: "New app needed",
+    message_content: "Hello, I need a new app",
+    message_senderName: "Jim Sabba",
+    message_senderEmail: "jim@sabba.com",
+  ) {
+    message_subject,
+    message_content,
+    message_senderName,
+    message_senderEmail,
+  }
+}
+```
+
 ## Person
 ```
 mutation Register {

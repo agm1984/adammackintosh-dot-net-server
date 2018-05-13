@@ -19,10 +19,17 @@ const addPerson = async (root, args, context) => {
   const tx = session.beginTransaction()
   try {
     // VALIDATE
-    isAuthenticated(context)
+    const hasAuth = isAuthenticated(context)
+    if (!hasAuth) {
+      throw new Error('You must be authenticated to run this query.')
+    }
+    let email
+    if (args.person_email) {
+      email = args.person_email.toLowerCase()
+    }
     const { error, value } = Joi.validate({
       ...args,
-      person_email: args.person_email.toLowerCase(),
+      person_email: email,
     }, addPersonValidator)
     if (error) {
       throw new Error('Field validation error.')

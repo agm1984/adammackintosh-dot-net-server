@@ -11,7 +11,11 @@ const getAuthor = async (root, args, context) => {
   const Neo4J = db.get('Neo4J')
   const session = Neo4J.session()
   try {
-    isAuthenticated(context)
+    // VALIDATE
+    const hasAuth = isAuthenticated(context)
+    if (!hasAuth) {
+      throw new Error('You must be authenticated to run this query.')
+    }
 
     // GET ARTICLE AUTHOR FROM NEO4J
     const result = await session.run(`
@@ -19,10 +23,11 @@ const getAuthor = async (root, args, context) => {
       WHERE a.article_slug = $root.article_slug
       RETURN p AS Person
     `, { root })
-    if (result.records.length !== 1) {
-      throw new Error(`Failed to get Author for Article: ${root.slug}`)
-    }
     session.close()
+    if (result.records.length !== 1) {
+      // throw new Error(`Failed to get Author for Article: ${root.slug}`)
+      return false
+    }
     return {
       ...result.records[0].get('Person').properties,
     }

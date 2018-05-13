@@ -19,7 +19,10 @@ const addArticle = async (root, args, context) => {
   let mongoSuccess
   try {
     // VALIDATE
-    isAuthenticated(context)
+    const hasAuth = isAuthenticated(context)
+    if (!hasAuth) {
+      throw new Error('You must be authenticated to run this query.')
+    }
     const { error, value } = Joi.validate({
       article_status: args.article_status,
       article_title: args.article_title,
@@ -110,7 +113,9 @@ const addArticle = async (root, args, context) => {
     await tx.commit()
     return finalFields
   } catch (e) {
-    await Article.findByIdAndRemove({ _id: mongoSuccess._id })
+    if (mongoSuccess) {
+      await Article.findByIdAndRemove({ _id: mongoSuccess._id })
+    }
     tx.rollback()
     session.close()
     throw e

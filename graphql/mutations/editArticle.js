@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import generateSlug from 'slug'
+import isAuthenticated from '../auth/isAuthenticated'
 import { checkSlugInUse } from './helpers'
 
 /**
@@ -19,6 +20,10 @@ const editArticle = async (root, args, context) => {
   const tx = session.beginTransaction()
   try {
     // VALIDATE
+    const hasAuth = isAuthenticated(context)
+    if (!hasAuth) {
+      throw new Error('You must be authenticated to run this query.')
+    }
     const { error, value } = Joi.validate({
       ...args,
     }, editArticleValidator)

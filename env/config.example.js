@@ -27,6 +27,26 @@ const getConfig = (NODE_ENV) => {
         pwd: 'insertMongoPassword',
       },
     },
+    test: {
+      PORT: 7777,
+      SECRET: 'INSERT_SERVER_SECRET',
+      CORS_OPTIONS: {
+        origin: 'http://localhost:2000',
+        optionsSuccessStatus: 200,
+      },
+      NEO4J: {
+        host: 'bolt://localhost',
+        user: 'insertNeo4jUser',
+        pwd: 'insertNeo4jPassword',
+      },
+      MONGODB: {
+        host: 'localhost',
+        port: '27017',
+        db: 'insertDBName',
+        user: 'insertMongoUser',
+        pwd: 'insertMongoPassword',
+      },
+    },
     production: {
       PORT: 1337,
       SECRET: 'INSERT_SERVER_SECRET',

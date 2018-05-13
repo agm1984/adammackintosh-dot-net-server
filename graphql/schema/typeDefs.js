@@ -1,4 +1,22 @@
 const typeDefs = `
+  #Message Type
+  type Message {
+    # Message's Subject
+    message_subject: String
+
+    # Message's Content
+    message_content: String
+
+    # Message Sender's Name
+    message_senderName: String
+
+    # Message Sender's Email
+    message_senderEmail: String
+
+    # Created Timestamp of the Message
+    article_created: String
+  }
+
   #Person Type
   type Person {
 
@@ -130,6 +148,14 @@ const typeDefs = `
 
   #This schema allows the following mutations:
   type Mutation {
+
+    # Receive Contact Form Message
+    contact(
+      message_subject: String!
+      message_content: String!
+      message_senderName: String!
+      message_senderEmail: String!
+    ): Message
 
     # Register a new Person
     register(

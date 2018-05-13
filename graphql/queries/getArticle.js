@@ -15,7 +15,10 @@ const getArticle = async (root, args, context) => {
   const session = Neo4J.session()
   try {
     // VALIDATE
-    isAuthenticated(context)
+    const hasAuth = isAuthenticated(context)
+    if (!hasAuth) {
+      throw new Error('You must be authenticated to run this query.')
+    }
     const { error, value } = Joi.validate({
       article_slug: args.article_slug,
     }, getArticleValidator)

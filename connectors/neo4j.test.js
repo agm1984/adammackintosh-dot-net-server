@@ -1,29 +1,17 @@
-import Neo4J from './neo4j'
-
-const driver = Neo4J.getDriver()
+import Neo4j from './neo4j'
 
 test('Neo4j driver connects', () => {
-  expect(driver).toBeDefined()
+  expect(Neo4j).toBeDefined()
 })
 
 test('Neo4j test query works', async () => {
-  const session = driver.session()
-  const testQuery = await session
-    .run(`
-      RETURN 1337 AS test
-    `)
-    .then((result) => {
-      session.close()
-      return result.records[0].get('test').low
-    })
-    .catch((error) => {
-      session.close()
-      return false
-    })
-  expect(testQuery).toBe(1337)
+  const session = Neo4j.session()
+  const testQuery = await session.run('RETURN 1337 AS test')
+  session.close()
+  const result = testQuery.records[0].get('test').low
+  expect(result).toBe(1337)
 })
 
-test('Neo4j Driver closes', () => {
-  driver.close()
-  expect(driver._openSessions['0']._ch._open).toBeFalsy()
+test('Neo4j driver closes without hanging thread', () => {
+  Neo4j.close()
 })

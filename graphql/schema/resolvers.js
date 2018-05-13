@@ -4,6 +4,7 @@ import {
 } from '../queries'
 import { getAuthor, getTags } from '../queries/Article'
 import {
+  contact,
   register, login, addPerson, editPerson,
   addArticle, editArticle, deleteArticle,
 } from '../mutations'
@@ -17,6 +18,7 @@ const resolvers = {
     getArticle: (root, args, context) => getArticle(root, args, context),
   },
   Mutation: {
+    contact: (root, args, context) => contact(root, args, context),
     register: (root, args, context) => register(root, args, context),
     login: (root, args, context) => login(root, args, context),
     addPerson: (root, args, context) => addPerson(root, args, context),

@@ -11,7 +11,11 @@ const me = async (root, args, context) => {
   const Neo4J = db.get('Neo4J')
   const session = Neo4J.session()
   try {
-    isAuthenticated(context)
+    // VALIDATE
+    const hasAuth = isAuthenticated(context)
+    if (!hasAuth) {
+      throw new Error('You must be authenticated to run this query.')
+    }
     const { person } = context
 
     // GET SELF FROM NEO4J

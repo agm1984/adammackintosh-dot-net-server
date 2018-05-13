@@ -5,10 +5,7 @@ import sniffer from 'request-ip'
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import jwt from 'jsonwebtoken'
 import schema from './graphql/schema'
-import Neo4J from './connectors/neo4j'
-import Mongoose from './connectors/mongoose' // eslint-disable-line
-import MongooseModels from './models'
-import fieldValidators from './validators'
+import db from './connectors'
 import getConfig from './env/config'
 
 const config = getConfig(process.env.NODE_ENV)
@@ -27,11 +24,6 @@ if (process.env.NODE_ENV !== 'production') {
     process.exit(1)
   })
 }
-const db = new Map([
-  ['Neo4J', Neo4J],
-  ['MongooseModels', MongooseModels],
-  ['fieldValidators', fieldValidators],
-])
 
 // MIDDLEWARE
 app.set('view engine', 'ejs')
@@ -86,13 +78,14 @@ app.all('*', async (req, res, next) => {
   // FUTURE: Add request counters eg: req.counter += 1
   console.log(`
     -- Person hitting route --
-    HTTP METHOD: ${req.method},
-    ORIGINAL URL: ${req.originalUrl},
-    ROUTE: ${req.route.path},
-    URL: ${req.url},
-    USER AGENT: ${req.headers['user-agent']},
+    HTTP METHOD: ${req.method}
+    ORIGINAL URL: ${req.originalUrl}
+    ROUTE: ${req.route.path}
+    URL: ${req.url}
+    USER AGENT: ${req.headers['user-agent']}
     USER IP: ${sniffer.getClientIp(req)}
     PERSON: ${req.person}
+    TIMESTAMP: ${Date.now()}
   `)
   return next()
 })
@@ -113,4 +106,4 @@ app.listen(config.PORT, () => {
   console.log(`┃  GRAPHIQL ENDPOINT: http://localhost:${config.PORT}/graphiql                   ┃`)
   console.log('┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛')
 })
-
+export default db

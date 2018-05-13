@@ -4,11 +4,10 @@
  * @param {Object} context GraphQL Context Value
  */
 const isAuthenticated = (context) => {
+  // console.log('CONTEXT', context)
   const { person } = context
-  if (!person) {
-    throw new Error('You are not logged in.')
-  }
-  return null
+  if (!person) return false
+  return true
 }
 
 export default isAuthenticated

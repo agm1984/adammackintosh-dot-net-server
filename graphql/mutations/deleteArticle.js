@@ -13,7 +13,10 @@ const deleteArticle = async (root, args, context) => {
   const session = Neo4J.session()
   const tx = session.beginTransaction()
   try {
-    isAuthenticated(context)
+    const hasAuth = isAuthenticated(context)
+    if (!hasAuth) {
+      throw new Error('You must be authenticated to run this query.')
+    }
     const { article_slug } = args
 
     // DELETE ARTICLE IN NEO4J
