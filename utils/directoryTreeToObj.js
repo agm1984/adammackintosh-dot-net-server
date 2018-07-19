@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 /**
- * This utility function recursively creates an object respresentation of a file path.
+ * This utility function recursively creates an Object respresentation of a file path.
  * @param {*} dir Directory to parse
  * @param {*} done onComplete Callback
  */
